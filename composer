@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+docker run                                                                 \
+    --rm                                                                   \
+    -u 1000:1000                                                           \
+    -v /home/javi/projects/symfony:/app                                    \
+    -w "/app"                                                              \
+    composer                                                               \
+    composer "$@"
