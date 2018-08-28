@@ -1,0 +1,26 @@
+version: '3'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  phpfpm:
+    image: 'bitnami/php-fpm:latest'
+    container_name: phpfpm
+    networks:
+      - app-tier
+    volumes:
+      - /home/javi/projects/symfony:/app
+  nginx:
+    image: 'bitnami/nginx:latest'
+    container_name: nginx
+    depends_on:
+      - phpfpm
+    networks:
+      - app-tier
+    ports:
+      - '80:8080'
+      - '443:8443'
+    volumes:
+      - /home/javi/projects/symfony/nginx.conf:/bitnami/nginx/conf/vhosts/nginx.conf
