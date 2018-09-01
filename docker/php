@@ -8,7 +8,8 @@ docker run                                                                 \
     -it                                                                    \
     --rm                                                                   \
     -u $HOST_USER_ID:$HOST_GROUP_ID                                        \
-    -v "$PRJ_DIR":/usr/src/myapp                                          \
+    -v "$PRJ_DIR":/usr/src/myapp                                           \
     -w /usr/src/myapp                                                      \
-    php:7.2-cli                                                            \
+    --network=${PRJ_NAME}-network                                          \
+    php:7.2-mysql                                                          \
     php "$@"
