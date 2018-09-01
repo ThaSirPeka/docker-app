@@ -1,26 +1,28 @@
 version: '3'
 
 networks:
-  app-tier:
-    driver: bridge
+  symfony-network:
+    external: true
 
 services:
   phpfpm:
     image: 'bitnami/php-fpm:latest'
     container_name: phpfpm
     networks:
-      - app-tier
+      - symfony-network
     volumes:
-      - /home/javi/projects/symfony:/app
+      - "${PRJ_DIR}:/app"
   nginx:
     image: 'bitnami/nginx:latest'
     container_name: nginx
     depends_on:
       - phpfpm
     networks:
-      - app-tier
+      symfony-network:
+        ipv4_address: 172.25.0.3
+
     ports:
       - '80:8080'
       - '443:8443'
     volumes:
-      - /home/javi/projects/symfony/nginx.conf:/bitnami/nginx/conf/vhosts/nginx.conf
+      - "${PRJ_DIR}/docker/nginx.conf:/bitnami/nginx/conf/vhosts/nginx.conf"

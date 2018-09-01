@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
+
+source "$script_dir/commonVariables"
+
+docker_network="symfony-network"
+
+network_existence="$(docker network ls -q -f "name=^"${docker_network}"$")"
+
+if [ -z "${network_existence}" ]; then
+    docker network create --driver bridge --subnet "172.25.0.0/16" "${docker_network}"
+fi
+
+docker-compose -f "${script_dir}/docker-compose.yml" up --no-build --force-recreate -d
