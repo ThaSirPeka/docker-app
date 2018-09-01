@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
+
+source "$script_dir/commonVariables"
+
 docker run                                                                 \
     --rm                                                                   \
-    -u 1000:1000                                                           \
+    -u $HOST_USER_ID:$HOST_GROUP_ID                                        \
     -v /home/javi/projects/symfony:/app                                    \
     -w "/app"                                                              \
     composer                                                               \
