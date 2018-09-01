@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
+
+source "$script_dir/commonVariables"
+
+docker-compose -f "${script_dir}/docker-compose.yml" down --volumes
