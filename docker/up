@@ -4,12 +4,23 @@ script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
 
 source "$script_dir/commonVariables"
 
-docker_network="symfony-network"
+#Create network
+docker_network="${PRJ_NAME}-network"
 
 network_existence="$(docker network ls -q -f "name=^"${docker_network}"$")"
 
 if [ -z "${network_existence}" ]; then
     docker network create --driver bridge --subnet "172.25.0.0/16" "${docker_network}"
+fi
+
+#Create Mysql volume
+volume_name=${PRJ_NAME}_mysql_volume
+
+volume_existence=`docker volume ls -q -f "name=^"${volume_name}"$"`
+
+if [ -z "${volume_existence}" ];
+then
+     docker volume create "${volume_name}"                                                                         ;
 fi
 
 docker-compose -f "${script_dir}/docker-compose.yml" up --no-build --force-recreate -d

@@ -1,5 +1,9 @@
 version: '3'
 
+volumes:
+  symfony_mysql_volume:
+    external: true
+
 networks:
   symfony-network:
     external: true
@@ -9,7 +13,9 @@ services:
     image: 'bitnami/php-fpm:latest'
     container_name: phpfpm
     networks:
-      - symfony-network
+      symfony-network:
+        aliases:
+          - symfony-phpfpm
     volumes:
       - "${PRJ_DIR}:/app"
   nginx:
@@ -20,9 +26,27 @@ services:
     networks:
       symfony-network:
         ipv4_address: 172.25.0.3
+        aliases:
+          - symfony-nginx
 
     ports:
       - '80:8080'
       - '443:8443'
     volumes:
       - "${PRJ_DIR}/docker/nginx.conf:/bitnami/nginx/conf/vhosts/nginx.conf"
+  db:
+    image: mysql:5.7
+    ports:
+      - "3310:3306"
+    volumes:
+      - symfony_mysql_volume:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=symfony
+      - MYSQL_USER=symfony
+      - MYSQL_PASSWORD=symfony
+    networks:
+      symfony-network:
+        ipv4_address: 172.25.0.4
+        aliases:
+          - symfony-mysql

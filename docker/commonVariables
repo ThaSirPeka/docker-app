@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 export PRJ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd -P )"
+export PRJ_NAME="$( cd ${PRJ_DIR} && echo ${PWD##*/} )"
 
 HOST_USER_NAME="$(whoami)"
 export HOST_USER_ID="$(id -u "${HOST_USER_NAME}")"
